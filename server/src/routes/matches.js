@@ -9,7 +9,7 @@ const matchRouter = Router();
 const MAX_LIMIT = 100;
 
 matchRouter.get("/", async (req, res) => {
-    const paresd = listMatchesQuerySchema.safeParse(req.query);
+    const parsed = listMatchesQuerySchema.safeParse(req.query);
     if (!parsed.success) {
         return res.status(400).json({ errors: parsed.error.errors });
     }
