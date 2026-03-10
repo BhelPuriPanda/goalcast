@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createMatchSchema } from "../validation/matches.js";
+import { createMatchSchema, listMatchesQuerySchema } from "../validation/matches.js";
 import { db } from "../db/db.js";
 import { matches } from "../db/schema.js";
 import { getMatchStatus } from "../utils/match-status.js";
