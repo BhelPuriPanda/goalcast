@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createMatchSchema } from "../validation/matches.js";
+import { createMatchSchema, listMatchesQuerySchema } from "../validation/matches.js";
 import { db } from "../db/db.js";
 import { matches } from "../db/schema.js";
 import { getMatchStatus } from "../utils/match-status.js";
@@ -9,7 +9,7 @@ const matchRouter = Router();
 const MAX_LIMIT = 100;
 
 matchRouter.get("/", async (req, res) => {
-    const paresd = listMatchesQuerySchema.safeParse(req.query);
+    const parsed = listMatchesQuerySchema.safeParse(req.query);
     if (!parsed.success) {
         return res.status(400).json({ errors: parsed.error.errors });
     }
