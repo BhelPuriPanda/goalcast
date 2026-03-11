@@ -14,6 +14,9 @@ const server = http.createServer(app)
 const PORT = process.env.PORT || 8000;
 const HOST = process.env.HOST || '0.0.0.0';
 
+// Trust the reverse proxy (Render) to get the real client IP for Arcjet
+app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(securityMiddleware())
 
