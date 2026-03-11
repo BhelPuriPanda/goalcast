@@ -36,8 +36,15 @@ export function securityMiddleware() {
         }
 
         try {
+            const clientIp = 
+                req.headers['x-forwarded-for']?.split(',')[0].trim() || 
+                req.headers['true-client-ip'] ||
+                req.ip ||
+                req.socket.remoteAddress;
+
             const decision = await httpArcjet.protect(req, {
-                requested: 1
+                requested: 1,
+                ip: clientIp 
             });
 
             if (decision.isDenied()) {
