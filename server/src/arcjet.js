@@ -31,6 +31,9 @@ export const wsArcjet = arcjetKey ?
 export function securityMiddleware() {
     return async (req , res ,next) => {
         if(!httpArcjet)return next();
+        if(process.env.NODE_ENV !== 'production' && (req.hostname === 'localhost' || req.hostname === '127.0.0.1')) {
+            return next();
+        }
 
         try {
             const decision = await httpArcjet.protect(req, {
@@ -41,9 +44,9 @@ export function securityMiddleware() {
                 if (decision.reason.isRateLimit()) {
                     return res.status(429).json({ error: 'Too Many Requests' });
                 }
-                if (decision.reason.isBot()) {
-                    return res.status(403).json({ error: 'Bot detected' });
-                }
+                // if (decision.reason.isBot()) {
+                //     return res.status(403).json({ error: 'Bot detected' });
+                // }
                 return res.status(403).json({ error: 'Access Denied' });
             }
 
