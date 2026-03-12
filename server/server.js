@@ -3,6 +3,7 @@ AgentAPI.config()
 
 import express from "express";
 import http from 'http'
+import cors from 'cors';
 import matchRouter from "./src/routes/matches.js";
 import { commentaryRouter } from "./src/routes/commentary.js";
 import { attachWebSocketSever } from "./src/ws/ws-server.js";
@@ -16,6 +17,22 @@ const HOST = process.env.HOST || '0.0.0.0';
 
 // Trust the reverse proxy (Render) to get the real client IP for Arcjet
 app.set("trust proxy", 1);
+
+const ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    process.env.CLIENT_ORIGIN, // set this to https://goalcast-1.onrender.com in Render env vars
+].filter(Boolean);
+
+app.use(cors({
+    origin: (origin, cb) => {
+        // allow server-to-server / Postman (no origin) and whitelisted origins
+        if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+        cb(new Error(`CORS: origin ${origin} not allowed`));
+    },
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type'],
+}));
 
 app.use(express.json());
 //app.use(securityMiddleware())
