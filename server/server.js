@@ -36,7 +36,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(securityMiddleware())
+//app.use(securityMiddleware())
 
 app.use("/matches", matchRouter);
 app.use("/matches/:id/commentary", commentaryRouter);

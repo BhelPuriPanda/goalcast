@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { createMatchSchema, listMatchesQuerySchema } from "../validation/matches.js";
 import { db } from "../db/db.js";
 import { matches } from "../db/schema.js";
@@ -25,6 +25,24 @@ matchRouter.get("/", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 }); 
+
+matchRouter.get("/:id", async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid match ID" });
+    }
+
+    try {
+        const [match] = await db.select().from(matches).where(eq(matches.id, id));
+        if (!match) {
+            return res.status(404).json({ error: `Match ${id} not found` });
+        }
+        res.status(200).json({ data: match });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 matchRouter.post("/", async (req, res) => {
     const parsed = createMatchSchema.safeParse(req.body);

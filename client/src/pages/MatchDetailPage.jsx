@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import { fetchCommentary } from '../api/api';
-import { fetchMatches } from '../api/api';
+import { fetchCommentary, fetchMatch } from '../api/api';
 import { on, off, subscribeMatch, unsubscribeMatch } from '../ws/ws';
 import StatusBadge from '../components/StatusBadge';
 import CommentaryItem from '../components/CommentaryItem';
@@ -20,13 +19,12 @@ export default function MatchDetailPage() {
   // Fetch match metadata + commentary on mount
   useEffect(() => {
     Promise.all([
-      fetchMatches(100),
+      fetchMatch(matchId),
       fetchCommentary(matchId, 100),
     ])
-      .then(([allMatches, commentaryData]) => {
-        const found = allMatches.find((m) => m.id === matchId);
-        if (!found) throw new Error('Match not found');
-        setMatch(found);
+      .then(([matchData, commentaryData]) => {
+        if (!matchData) throw new Error('Match not found');
+        setMatch(matchData);
         // Commentary comes newest-first from API; keep that order
         setCommentary(commentaryData);
       })
