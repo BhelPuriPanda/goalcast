@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-#env files
+# env files — .env.production is intentionally committed (public URLs only, no secrets)
 .env
 .env.development
-.env.production
+.env.local
