@@ -31,7 +31,7 @@ export const wsArcjet = arcjetKey ?
 export function securityMiddleware() {
     return async (req , res ,next) => {
         if(!httpArcjet)return next();
-        if(process.env.NODE_ENV !== 'production' && (req.hostname === 'localhost' || req.hostname === '127.0.0.1')) {
+        if(process.env.ARCJET_ENV === 'development') {
             return next();
         }
 
@@ -40,7 +40,8 @@ export function securityMiddleware() {
                 req.headers['x-forwarded-for']?.split(',')[0].trim() || 
                 req.headers['true-client-ip'] ||
                 req.ip ||
-                req.socket.remoteAddress;
+                req.socket.remoteAddress || 
+                '127.0.0.1';
 
             const decision = await httpArcjet.protect(req, {
                 requested: 1,

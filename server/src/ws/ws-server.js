@@ -125,7 +125,7 @@ export function attachWebSocketSever(server,socket) {
     
 
     function broadcastMatchCreated(match){
-        broadcast(wss , {type:'match-created',data:match});
+        broadcastToAll(wss , {type:'match-created',data:match});
     }
 
     function broadcastCommentaryAdded(commentary){

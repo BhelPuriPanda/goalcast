@@ -18,7 +18,7 @@ const HOST = process.env.HOST || '0.0.0.0';
 app.set("trust proxy", 1);
 
 app.use(express.json());
-app.use(securityMiddleware())
+//app.use(securityMiddleware())
 
 app.use("/matches", matchRouter);
 app.use("/matches/:id/commentary", commentaryRouter);
