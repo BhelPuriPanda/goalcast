@@ -9,8 +9,13 @@ function getKey(type, matchId) {
 function getOrCreate() {
   if (socket && socket.readyState <= WebSocket.OPEN) return socket;
 
-  const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
-  socket = new WebSocket(`${proto}://${window.location.host}/ws`);
+  // In production VITE_WS_URL = wss://goalcast.onrender.com/ws
+  // In development the Vite proxy forwards /ws → ws://localhost:8000/ws
+  const wsUrl =
+    import.meta.env.VITE_WS_URL ||
+    `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws`;
+
+  socket = new WebSocket(wsUrl);
 
   socket.addEventListener('message', (evt) => {
     let msg;
