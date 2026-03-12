@@ -21,7 +21,8 @@ app.set("trust proxy", 1);
 const ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://localhost:5174',
-    process.env.CLIENT_ORIGIN, // set this to https://goalcast-1.onrender.com in Render env vars
+    'https://goalcast-1.onrender.com',
+    process.env.CLIENT_ORIGIN, // optional override
 ].filter(Boolean);
 
 app.use(cors({
@@ -35,7 +36,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-//app.use(securityMiddleware())
+app.use(securityMiddleware())
 
 app.use("/matches", matchRouter);
 app.use("/matches/:id/commentary", commentaryRouter);
