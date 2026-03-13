@@ -4,7 +4,7 @@
 
 Goalcast is a full-stack, event-driven sports platform that streams live match scores and commentary to every connected viewer the instant they happen. Built on a WebSocket-first architecture, it eliminates the need for polling or manual refreshes — new matches and commentary events propagate to all clients in milliseconds.
 
-![goalcast](https://github.com/user-attachments/assets/b44dbf41-19ee-4b00-b1d9-8c167dff5910)
+![Goalcast demo](assets/goalcast.gif)
 
 ---
 
