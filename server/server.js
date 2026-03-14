@@ -9,6 +9,12 @@ import { commentaryRouter } from "./src/routes/commentary.js";
 import { attachWebSocketSever } from "./src/ws/ws-server.js";
 import { securityMiddleware } from "./src/arcjet.js";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const server = http.createServer(app)
 
@@ -40,6 +46,14 @@ app.use(express.json());
 
 app.use("/matches", matchRouter);
 app.use("/matches/:id/commentary", commentaryRouter);
+
+// Serve the built React client from the dist folder
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// Fallback all other requests to the React app (Client-side routing)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
 
 const { broadcastMatchCreated, broadcastCommentaryAdded } = attachWebSocketSever(server);
 app.locals.broadcastMatchCreated = broadcastMatchCreated;
