@@ -51,7 +51,7 @@ app.use("/matches/:id/commentary", commentaryRouter);
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Fallback all other requests to the React app (Client-side routing)
-app.get('*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
